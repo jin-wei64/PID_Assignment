@@ -1,0 +1,18 @@
+create database shopping default character set utf8;
+use shopping;
+create table client( clientid int AUTO_INCREMENT primary key,
+                     clientAccount varchar(20), 
+                     clientPassword varchar(20), 
+                     clientName varchar(20), 
+                     clientBday varchar(20), 
+                     clientEmail varchar(45), 
+                     clientPhone varchar(15), 
+                     clientSex int
+                     orderQuantity int);
+                     
+insert into client(clientAccount,clientPassword,clientName,clientBday,clientEmail,clientPhone,clientSex) 
+values('xd99999000','xd9999521','XD5555','0823','xd9999000@gmail.com','0912345678','1'),
+('ryu64j','ryu0604','Ryu','0604','ryu64j@gmail.com','0902000333','0');
+
+create table products( productId int AUTO_INCREMENT primary key, productName varchar(20), inStock int, price int );
+insert into products (productName,inStock,price) values ('cellphone','1000','20000'),('camera','3000','30000')
