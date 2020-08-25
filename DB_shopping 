@@ -16,3 +16,5 @@ values('xd99999000','xd9999521','XD5555','0823','xd9999000@gmail.com','091234567
 
 create table products( productId int AUTO_INCREMENT primary key, productName varchar(20), inStock int, price int );
 insert into products (productName,inStock,price) values ('cellphone','1000','20000'),('camera','3000','30000')
+
+insert into buycar (clientid,productId,productName,quantity) values ('1','1','Cellphone','1');
