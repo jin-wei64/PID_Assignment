@@ -1,4 +1,8 @@
 <?php
+session_start();
+$account = $_SESSION["account"];
+$clientid =  $_SESSION["clientid"];
+// echo $clientid;
 if (!isset($_GET["id"])) {
     die("id not found.");
 }
@@ -12,14 +16,13 @@ $link = mysqli_connect("localhost", "root", "root", "shopping", 8889);
 mysqli_query($link, "set names utf-8");
 $result = mysqli_query($link , $sql);
 $row = mysqli_fetch_assoc ( $result );
-
 if(isset($_POST["okBtn"])){
     $productId = $row["productId"];
 	$productName = $row["productName"];
 	$quantity = $_POST["quantity"];
-    $buycarsql= "insert into buycar (clientid,productId,productName,quantity) values ('2','$productId','$productName','$quantity') ";
+    $buycarsql= "insert into buycar (clientid,productId,productName,quantity) values ('$clientid','$productId','$productName','$quantity') ";
 	mysqli_query($link,$buycarsql);
-	header("location:buyCar.php?id=2");
+	header("location:buynet.php?id=$account");
 	exit();
 }
 

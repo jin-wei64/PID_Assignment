@@ -1,6 +1,8 @@
 <?php
+session_start();
+$clientId =$_SESSION["clientid"];
 if (isset($_POST["cancelButton"])) {
-  header("location: index.php");
+  header("location: buyCar.php?id=$clientId");
   exit();
 }
 if (!isset($_GET["id"])) {
@@ -11,28 +13,29 @@ if (! is_numeric ( $id ))
     die ( "id not a number." );
 
 //echo $sql;
-require("connDB.php");
+$link = mysqli_connect("localhost", "root", "root", "shopping", 8889);
+  mysqli_query($link, "set names utf-8");
 if (isset($_POST["editbutton"])) {
-  $productName = $_POST["productName"];
-  $price = $_POST["price"];
-  $inStock = $_POST["inStock"];
+  $quantity = $_POST["Quantity"];
   $sql = <<<multi
-    update products set 
-       productName = '$productName', 
-       price='$price', 
-       inStock = $inStock
-    where productId = $id
+    update buycar set 
+       quantity='$quantity' 
+    where buyCarId = $id;
   multi;
   mysqli_query($link, $sql);
-  header("location: index.php");
+  header("location: buyCar.php?id=$clientId ");
   exit();
 }
 else {
   $sql = <<<multi
-    select * from products where productId = $id
+    select * from buycar where buyCarId = $id
   multi;
   $result = mysqli_query($link, $sql);
   $row = mysqli_fetch_assoc($result);
+  $productName = $row["productName"];
+  $product = "select price from products where productName = '$productName ' ";
+  $Presult = mysqli_query($link, $product);
+  $Prow = mysqli_fetch_assoc($Presult);
 }
 
 //var_dump($row);
@@ -60,19 +63,19 @@ else {
   <div class="form-group row">
     <label for="productName" class="col-4 col-form-label">Name</label> 
     <div class="col-8">
-      <input  value = "<?= $row["productName"] ?>" id="productName" name="productName" type="text" class="form-control">
+      <H3><?= $row["productName"] ?></H3>
     </div>
   </div>
   <div class="form-group row">
     <label for="price" class="col-4 col-form-label">Price</label> 
     <div class="col-8">
-      <input value = "<?= $row["price"] ?>" id="price" name="price" type="text" class="form-control">
+      <h3><?= $Prow["price"] ?></h3>
     </div>
   </div>
   <div class="form-group row">
     <label for="inStock" class="col-4 col-form-label">Quantity</label> 
     <div class="col-8">
-      <input value = "<?= $row["inStock"] ?>" id="inStock" name="inStock" type="text" class="form-control">
+      <input value = "<?= $row["quantity"] ?>" id="Quantity" name="Quantity" type="text" class="form-control">
     </div>
   </div> 
   <div class="form-group row">

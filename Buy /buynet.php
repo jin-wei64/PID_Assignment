@@ -1,6 +1,14 @@
 <?php
+session_start();
+$account = $_GET["id"];
+$_SESSION["account"] = $account ;
 $link = mysqli_connect("localhost", "root", "root", "shopping", 8889);
 mysqli_query($link, "set names utf-8");
+$acoountId = "select clientid from client where clientAccount = '$account' ; ";
+$IDresult = mysqli_query($link , $acoountId);
+$IDrow = mysqli_fetch_assoc ( $IDresult );
+$clientid = $IDrow["clientid"];
+$_SESSION["clientid"] = $clientid ;
 $sqlStatement = <<<multi
 select * from products;
 multi;
@@ -9,7 +17,7 @@ $result = mysqli_query($link, $sqlStatement);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Product</title>
+  <title>首頁</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -20,9 +28,10 @@ $result = mysqli_query($link, $sqlStatement);
 <body>
 
 <div class="container">
-  <h2>Products List
-      <a href="login.php" class="btn btn-outline-info btn-md float-right">登入</a>
-      <a href="registered.php" class="btn btn-outline-info btn-md float-right">註冊</a>
+  <h2>首頁  
+      <a href="index.php?id=logout" class="btn btn-outline-info btn-md float-right">登出</a>
+      <a href="buyCar.php?id=<?=$clientid?>" class="btn btn-outline-info btn-md float-right">購物車</a>
+      <a href="order.php?id=<?=$account?>" class="btn btn-outline-info btn-md float-right">歷史訂單</a>
   </h2>
   <table class="table table-striped">
     <thead>

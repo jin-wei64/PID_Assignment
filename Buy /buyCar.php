@@ -1,16 +1,25 @@
 <?php
     session_start();
+    $account = $_SESSION["account"];
     $clientID = $_GET["id"];
-    $_SESSION["clientID"] = $clientID;
-    if($clientID == 1){
+    // echo $clientID ;
+    if(isset($clientID)){
       $sql = <<<sql
        select buyCarId,productName ,z.quantity ,z.quantity*(select p.price from products as p where productId = z.productId) as total 
-       from buycar as z where z.clientid = $clientID 
+       from buycar as z where z.clientid = $clientID ;
        sql;
       $link = mysqli_connect("localhost", "root", "root", "shopping", 8889);
       mysqli_query($link, "set names utf-8");
       $result = mysqli_query($link , $sql);
+
     }
+    if(isset($_POST["clear"])){
+      $deleteBuyCar  = "delete from buycar where clientid = $clientID;";
+      mysqli_query($link,$deleteBuyCar);
+      header("location:buyCar.php?id=$clientID ");
+    } 
+    $sum= 0;
+    $total= 0;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +36,7 @@
 
 <div class="container">
   <h2>BuyCar List
-      <a href="addEmployee.php" class="btn btn-outline-info btn-md float-right">New</a>
+      <a href="buynet.php?id=<?=$account?>" class="btn btn-outline-info btn-md float-right">首頁</a>
   </h2>
   <table class="table table-striped">
     <thead>
@@ -46,17 +55,29 @@
         <td><?= $row["total"] ?></td>
         <td>
             <span class="float-right">
-                <a href="./editForm.php?id=<?= $row["productId"] ?>" class="btn btn-outline-success btn-sm">Edit</a>
+                <a href="./editForm.php?id=<?=$row["buyCarId"]  ?>" class="btn btn-outline-success btn-sm">Edit</a>
                 | 
                 <a href="./deleteEmployee.php?id=<?= $row["buyCarId"] ?>" class="btn btn-outline-danger btn-sm">Delete</a>
             </span>
         </td>
       </tr>
+      <?php $total += $row["total"]  ?>
+      <?php $sum += 1 ?>
     <?php } ?>
-    
     </tbody>
   </table>
+  <h3>總金額：<?= $total ?></h3>
+  <form method="post">
+  <button  id ="clear"name = "clear"class="btn btn-outline-danger float-right">清除購物車</button>
+  </form>
+  <a id = "OK" href="order.php?id=<?= $clientID ?>" class="btn btn-outline-warning float-right">確認購買</a>
 </div>
-
 </body>
+<script>
+    let a = <?= $sum ?>;
+    if(a==0){
+      $("#OK").hide();
+      $("#clear").hide();
+    }
+</script>
 </html>
