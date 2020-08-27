@@ -37,9 +37,6 @@ else {
   $Presult = mysqli_query($link, $product);
   $Prow = mysqli_fetch_assoc($Presult);
 }
-
-//var_dump($row);
-// header("location: index.php");
 ?>
 
 <!DOCTYPE html>

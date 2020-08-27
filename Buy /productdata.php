@@ -22,7 +22,7 @@ if(isset($_POST["okBtn"])){
 	$quantity = $_POST["quantity"];
     $buycarsql= "insert into buycar (clientid,productId,productName,quantity) values ('$clientid','$productId','$productName','$quantity') ";
 	mysqli_query($link,$buycarsql);
-	header("location:buynet.php?id=$account");
+	header("location:index.php?id=$account");
 	exit();
 }
 

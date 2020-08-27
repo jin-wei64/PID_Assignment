@@ -20,22 +20,32 @@ session_start();
             $quantity = $buycar["quantity"];
             $totalprice = $buycar["totalprice"];
             $orderdetails = "insert into orderdetails(orderId , productId , quantity ,totalprice)values('$lastorderID','$productId','$quantity','$totalprice ') ;";
-            $orderdetailsview = mysqli_query($link,$orderdetails);
+            mysqli_query($link,$orderdetails);
         }
-        $orderdetailsSql = "select e.orderId,e.productId,a.productName,e.quantity,e.totalprice from orderdetails e 
+        $orderdetailsSql = "select e.orderId,e.productId,a.productName,e.quantity,e.totalprice ,f.time from orderdetails e 
         JOIN products a on e.productId = a.productId 
         JOIN orders f on e.orderId = f.orderId where f.orderId = $lastorderID" ; 
         $orderdetailsview= mysqli_query($link,$orderdetailsSql);
         
         // header("location:buynet.php?id=$account") ;
    }
-   else{
-        $orderdetailsSql = "select e.orderId,e.productId,a.productName,e.quantity,e.totalprice from orderdetails e 
-        JOIN products a on e.productId = a.productId 
-        JOIN orders f on e.orderId = f.orderId where f.clientid = $clientid" ; 
-        $orderdetailsview= mysqli_query($link,$orderdetailsSql); 
-
-   }
+    if(!is_numeric($_GET["id"])){
+          $orderdetailsSql = "select e.orderId,e.productId,a.productName,e.quantity,e.totalprice, f.time from orderdetails e 
+          JOIN products a on e.productId = a.productId 
+          JOIN orders f on e.orderId = f.orderId where f.clientid = $clientid order by f.time DESC" ; 
+          $orderdetailsview= mysqli_query($link,$orderdetailsSql); 
+    }
+    if(isset($_GET["order"])){
+      $Getaccount = $_GET["order"];
+      $orderdetailsSql = "select f.clientid, e.orderId,e.productId,a.productName,e.quantity,e.totalprice, f.time 
+      from orderdetails e 
+      JOIN products a on e.productId = a.productId 
+      JOIN orders f on e.orderId = f.orderId 
+      JOIN client c on f.clientid = c.clientid 
+      where c.clientAccount = '$Getaccount' order by f.orderId DESC
+      " ; 
+      $orderdetailsview= mysqli_query($link,$orderdetailsSql); 
+      }
 
    
 ?>
@@ -54,24 +64,34 @@ session_start();
 
 
 <div class="container">
-  <h2><?= is_numeric($_GET["id"]) ? "本次購買項目":"歷史紀錄" ?>
-      <a href="buynet.php?id=<?=$account?>" class="btn btn-outline-info btn-md float-right">首頁</a>
+<?php if(isset($_GET["order"])) { ?>
+  <h2><?= $_GET["order"]?>的訂單
+      <a href="control/index.php" class="btn btn-outline-info btn-md float-right">控制頁</a>
   </h2>
+<?php } else { ?>
+  <h2><?= is_numeric($_GET["id"]) ? "本次購買項目":"歷史紀錄" ?>
+      <a href="index.php?id=<?=$account?>" class="btn btn-outline-info btn-md float-right">首頁</a>
+  </h2>
+<?php } ?>
   <table class="table table-striped">
     <thead>
       <tr>
+        <th>OrderNuber</th>
         <th>Name</th>
         <th>Quantity</th>
         <th>Price</th>
+        <th>Time</th>
         <th>&nbsp;</th>
       </tr>
     </thead>
     <tbody>
     <?php while ( $Odrow = mysqli_fetch_assoc($orderdetailsview) ) { ?>
       <tr>
+        <td><?= $Odrow["orderId"] ?></td>
         <td><?= $Odrow["productName"] ?></td>
         <td><?= $Odrow["quantity"] ?></td>
         <td><?= $Odrow["totalprice"] ?></td>
+        <td><?= $Odrow["time"] ?></td>
         <?php $a += $Odrow["totalprice"] ?>
       </tr>
     <?php } ?>

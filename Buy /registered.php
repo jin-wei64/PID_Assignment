@@ -14,7 +14,7 @@
         $link = mysqli_connect ( 'localhost', 'root', 'root', 'shopping', 8889 ) or die ( mysqli_connect_error() );
         $result = mysqli_query ( $link, "set names utf8");
         mysqli_query($link, $sql);
-        header("location:index.php");
+        header("location:login.php");
     }
 ?>
 <!DOCTYPE html>
@@ -86,6 +86,8 @@
   <div class="form-group row">
     <div class="offset-4 col-8">
       <button name="registerBtn" type="submit" class="btn btn-primary">register</button>
+      <a href = "index.php" name="registered" type="submit" class="btn btn-primary" require >首頁</a>
+      <a href="login.php" class="btn btn-outline-info btn-md float-right">登入</a>
     </div>
   </div>
 </div>

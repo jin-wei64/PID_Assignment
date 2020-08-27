@@ -36,7 +36,7 @@
 
 <div class="container">
   <h2>BuyCar List
-      <a href="buynet.php?id=<?=$account?>" class="btn btn-outline-info btn-md float-right">首頁</a>
+      <a href="index.php?id=<?=$account?>" class="btn btn-outline-info btn-md float-right">首頁</a>
   </h2>
   <table class="table table-striped">
     <thead>

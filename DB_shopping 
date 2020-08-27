@@ -18,3 +18,16 @@ create table products( productId int AUTO_INCREMENT primary key, productName var
 insert into products (productName,inStock,price) values ('cellphone','1000','20000'),('camera','3000','30000')
 
 insert into buycar (clientid,productId,productName,quantity) values ('1','1','Cellphone','1');
+
+create table orders ( orderId int AUTO_INCREMENT primary key, clientd int );
+create table orderdetails (orderId , productId int , quantiy int ,totalprice int);
+
+alter table orderdetails add constraint fk_orders_orderdetails 
+foreign key (orderId)references orders (orderId) 
+on update cascade
+on delete cascade;
+
+
+delete from stopclient where clientid = id;
+insert into ctopclient where clientid = id;
+
