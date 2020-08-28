@@ -31,11 +31,12 @@ $result = mysqli_query($link, $sqlStatement);
   <h2>首頁
       <?php if(isset($account)){ ?>  
         <a href="login.php?id=logout" class="btn btn-outline-info btn-md float-right">登出</a>
+        <a href="buyCar.php?id=<?=$clientid?>" class="btn btn-outline-info btn-md float-right">購物車</a>
+        <a href="order.php?id=<?=$account?>" class="btn btn-outline-info btn-md float-right">歷史訂單</a>
       <?php } else {?>
       <a href="login.php" class="btn btn-outline-info btn-md float-right">登入</a>
       <?php } ?>
-      <a href="buyCar.php?id=<?=$clientid?>" class="btn btn-outline-info btn-md float-right">購物車</a>
-      <a href="order.php?id=<?=$account?>" class="btn btn-outline-info btn-md float-right">歷史訂單</a>
+      
   </h2>
   <table class="table table-striped">
     <thead>
@@ -56,7 +57,7 @@ $result = mysqli_query($link, $sqlStatement);
         <td><?= $row["inStock"] ?></td>
         <td>
             <span class="float-right">
-                <a id= "buycar" href="./productdata.php?id=<?= $row["productId"] ?>" class="btn btn-outline-success btn-sm ryu">加入購物車</a>
+                <a id= "buycar" href="./productdata.php?id=<?= $row["productId"] ?>" class="btn btn-outline-success btn-sm ryu">查看詳情</a>
             </span>
         </td>
       </tr>

@@ -22,6 +22,7 @@ $result = mysqli_query($link, $sqlStatement);
 <div class="container">
   <h2>Products List
       <a href="addEmployee.php" class="btn btn-outline-info btn-md float-right">New</a>
+      <a href="../index.php" class="btn btn-outline-info btn-md float-right">控制頁</a>
   </h2>
   <table class="table table-striped">
     <thead>
