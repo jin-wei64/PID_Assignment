@@ -61,12 +61,12 @@
         <td><?= $row["clientName"] ?></td>
         <td>
             <span class="float-right">
-                <a href="index.php?id=<?= $row["clientid"]?>" class="ryu btn btn-outline-success btn-sm">ClientProfile</a>
+                <a href="index.php?id=<?= $row["clientid"]?>" class="ryu btn btn-outline-dark btn-sm">ClientProfile</a>
                 | 
                 <?php if ($row['status'] == 1 ) {?>
-                  <a  name = "open" href="index.php?stop=<?= $row["clientid"]?>" class="btn btn-outline-danger btn-sm">OPEN</a>
+                  <a  name = "open" href="index.php?stop=<?= $row["clientid"]?>" class="btn btn-outline-danger btn-sm">Stopping...</a>
                 <?php } else { ?>
-                  <a  name = "stop" href="index.php?stop=<?= $row["clientid"]?>" class="btn btn-outline-danger btn-sm">STOP</a>
+                  <a  name = "stop" href="index.php?stop=<?= $row["clientid"]?>" class="btn btn-outline-success btn-sm">opening...</a>
                 <?php }?>
             </span>
         </td>
