@@ -5,9 +5,10 @@
     header("Location: login.php");
     exit();
   }
+  $account = $_POST["Account"];
+  $password = $_POST["password"];
   if(isset($_POST['user'])){
-    $account = $_POST["Account"];
-    $password = $_POST["password"];
+    
     if($account == "ryu666" && $password == "xd9999521"){
       header("location:control/index.php");
     }
@@ -22,9 +23,10 @@
   mysqli_query($link, "set names utf-8");
   $stop= "select clientid from stopClient ;";
   $stopRow = mysqli_fetch_assoc(mysqli_query($link,$stop));
+  $account = $_POST["Account"];
+  $password= $_POST["password"];
   if(isset($_POST['submit'])){
-    $account = $_POST["Account"];
-    $password= $_POST["password"];
+    
     
     $sqlAccount = <<<multi
     select clientid,clientAccount , clientPassword ,status from client where clientAccount = '$account' ;
