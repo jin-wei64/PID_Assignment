@@ -118,7 +118,7 @@
                               <span class="glyphicon glyphicon-remove"></span> OK
                               </a>
                               <a 
-                                href = "../order.php?order=<?=$clientRow["clientAccount"]?>"
+                                href = "clientorders.php?id=<?=$clientRow["clientAccount"]?>"
                                 type="button"
                                 id="cancelButton"
                                 class="btn btn-default"

@@ -37,6 +37,8 @@ session_start();
           $update = "update products set inStock = $instock  where productId = $p";
           mysqli_query($link,$update);
         }
+        $deleteBuyCar  = "delete from buycar where clientid = $clientid;";
+        mysqli_query($link,$deleteBuyCar);
 
    }
     if(!is_numeric($_GET["id"])){
