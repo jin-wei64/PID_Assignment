@@ -3,9 +3,19 @@ if (isset($_POST["addbutton"])) {
   $productName = $_POST["productName"];
   $price = $_POST["price"];
   $inStock = $_POST["inStock"];
+  
+  if ($_FILES["file"]["error"] > 0){
+    echo "Error: " . $_FILES["file"]["error"];
+  } 
+  else{
+    $s = $_FILES["file"]["tmp_name"];
+    $targe = "../img/".$_FILES["file"]["name"];
+    move_uploaded_file($s,$targe);
+  }
+  $picture = $_FILES["file"]["name"];
   $sql = <<<multi
-    insert into products (productName, price, inStock)
-    values ('$productName', '$price', '$inStock');
+    insert into products (productName, price, inStock , picture)
+    values ('$productName', '$price', '$inStock','$picture');
   multi;
   require("connDB.php");
   mysqli_query($link, $sql);
@@ -29,7 +39,7 @@ if (isset($_POST["addbutton"])) {
 
 <div class="container">
 <div>&nbsp</div>
-<form method="post">
+<form method="post" enctype="multipart/form-data" >
   <div class="form-group row">
     <label for="productName" class="col-4 col-form-label">Name</label> 
     <div class="col-8">
@@ -46,6 +56,12 @@ if (isset($_POST["addbutton"])) {
     <label for="inStock" class="col-4 col-form-label">Quantity</label> 
     <div class="col-8">
       <input id="inStock" name="inStock" type="text" class="form-control">
+    </div>
+  </div> 
+  <div class="form-group row">
+    <label for="inStock" class="col-4 col-form-label">Picture</label> 
+    <div class="col-8">
+      檔案名稱:<input type="file" name="file" id="file" /><br />
     </div>
   </div> 
   <div class="form-group row">

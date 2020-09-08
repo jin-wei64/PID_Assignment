@@ -17,14 +17,23 @@ $link = mysqli_connect("localhost", "root", "root", "shopping", 8889);
   mysqli_query($link, "set names utf-8");
 if (isset($_POST["editbutton"])) {
   $quantity = $_POST["Quantity"];
-  $sql = <<<multi
-    update buycar set 
-       quantity='$quantity' 
-    where buyCarId = $id;
-  multi;
-  mysqli_query($link, $sql);
-  header("location: buyCar.php?id=$clientId ");
-  exit();
+  if($quantity <= $_SESSION['instock'] && $quantity > 0 ){
+    $sql = <<<multi
+      update buycar set 
+      quantity='$quantity' 
+      where buyCarId = $id;
+    multi;
+    mysqli_query($link, $sql);
+    header("location: buyCar.php?id=$clientId ");
+    exit();
+  }
+  else if ($quantity <= 0){
+    echo "<script>alert('請輸入０以上的數'); location.href = 'editForm.php?id=$id';</script>";
+  }
+  else
+    echo "<script>alert('庫存不足'); location.href = 'editForm.php?id=$id';</script>";
+  
+    
 }
 else {
   $sql = <<<multi
@@ -33,9 +42,10 @@ else {
   $result = mysqli_query($link, $sql);
   $row = mysqli_fetch_assoc($result);
   $productName = $row["productName"];
-  $product = "select price from products where productName = '$productName ' ";
+  $product = "select * from products where productName = '$productName ' ";
   $Presult = mysqli_query($link, $product);
   $Prow = mysqli_fetch_assoc($Presult);
+  $_SESSION['instock'] = $Prow["inStock"];
 }
 ?>
 
@@ -70,9 +80,15 @@ else {
     </div>
   </div>
   <div class="form-group row">
+    <label for="price" class="col-4 col-form-label">庫存</label> 
+    <div class="col-8">
+      <h3><?= $Prow["inStock"] ?></h3>
+    </div>
+  </div>
+  <div class="form-group row">
     <label for="inStock" class="col-4 col-form-label">Quantity</label> 
     <div class="col-8">
-      <input value = "<?= $row["quantity"] ?>" id="Quantity" name="Quantity" type="text" class="form-control">
+      <input  value = "<?= $row["quantity"] ?>" id="Quantity" name="Quantity" type="text" class="form-control" required>
     </div>
   </div> 
   <div class="form-group row">

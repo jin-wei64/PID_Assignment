@@ -13,16 +13,35 @@ if (! is_numeric ( $id ))
 //echo $sql;
 require("connDB.php");
 if (isset($_POST["editbutton"])) {
+  if ($_FILES["file"]["error"] > 0){
+    echo "Error: " . $_FILES["file"]["error"];
+  } else{
+    $s = $_FILES["file"]["tmp_name"];
+    $targe = "../img/".$_FILES["file"]["name"];
+    move_uploaded_file($s,$targe);
+  }
+  $name = $_FILES["file"]["name"];
   $productName = $_POST["productName"];
   $price = $_POST["price"];
   $inStock = $_POST["inStock"];
-  $sql = <<<multi
-    update products set 
-       productName = '$productName', 
-       price='$price', 
-       inStock = $inStock
-    where productId = $id
-  multi;
+  if($name){
+    $sql = <<<multi
+      update products set 
+        productName = '$productName', 
+        price='$price', 
+        inStock = $inStock,
+        picture = '$name'
+      where productId = $id
+    multi;
+  } else{
+    $sql = <<<multi
+      update products set 
+        productName = '$productName', 
+        price='$price', 
+        inStock = $inStock
+      where productId = $id
+    multi;
+  }
   mysqli_query($link, $sql);
   header("location: index.php");
   exit();
@@ -56,7 +75,7 @@ else {
 
 <div class="container">
 <div>&nbsp</div>
-<form method="post">
+<form method="post" enctype="multipart/form-data" >
   <div class="form-group row">
     <label for="productName" class="col-4 col-form-label">Name</label> 
     <div class="col-8">
@@ -73,6 +92,12 @@ else {
     <label for="inStock" class="col-4 col-form-label">Quantity</label> 
     <div class="col-8">
       <input value = "<?= $row["inStock"] ?>" id="inStock" name="inStock" type="text" class="form-control">
+    </div>
+  </div> 
+  <div class="form-group row">
+    <label for="inStock" class="col-4 col-form-label">Picture</label> 
+    <div class="col-8">
+      檔案名稱:<input type="file" name="file" id="file" /><br />
     </div>
   </div> 
   <div class="form-group row">

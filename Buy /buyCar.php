@@ -4,10 +4,12 @@
     $clientID = $_GET["id"];
     // echo $clientID ;
     if(isset($clientID)){
-      $sql = <<<sql
-       select buyCarId,productName ,z.quantity ,z.quantity*(select p.price from products as p where productId = z.productId) as total 
-       from buycar as z where z.clientid = $clientID ;
-       sql;
+      $sql = "
+      select b.buyCarId,p.productName,p.inStock,b.productId ,b.clientId  ,b.quantity*p.price as total,b.quantity, p.price 
+      FROM `buycar` as b 
+      JOIN products as p 
+      on  b.productId = p.productId where b.clientid = '$clientID' ;
+      ";
       $link = mysqli_connect("localhost", "root", "root", "shopping", 8889);
       mysqli_query($link, "set names utf-8");
       $result = mysqli_query($link , $sql);
@@ -57,7 +59,7 @@
             <span class="float-right">
                 <a href="./editForm.php?id=<?=$row["buyCarId"]  ?>" class="btn btn-outline-success btn-sm">Edit</a>
                 | 
-                <a href="./deleteEmployee.php?id=<?= $row["buyCarId"] ?>" class="btn btn-outline-danger btn-sm">Delete</a>
+                <a href="./deleteProduct.php?id=<?= $row["buyCarId"] ?>" class="btn btn-outline-danger btn-sm">Delete</a>
             </span>
         </td>
       </tr>

@@ -26,8 +26,18 @@ session_start();
         JOIN products a on e.productId = a.productId 
         JOIN orders f on e.orderId = f.orderId where f.orderId = $lastorderID" ; 
         $orderdetailsview= mysqli_query($link,$orderdetailsSql);
-        
-        // header("location:buynet.php?id=$account") ;
+        $a = "select p.productId ,p.inStock-o.quantity as instock  
+        from orderdetails as o JOIN products p 
+        on p.productId = o.productId 
+        where p.productId = o.productId  and o.orderId = '$lastorderID' ";
+        $b = mysqli_query($link,$a);
+        while ( $c = mysqli_fetch_assoc($b) ){
+          $p = $c['productId'];
+          $instock = $c['instock'];
+          $update = "update products set inStock = $instock  where productId = $p";
+          mysqli_query($link,$update);
+        }
+
    }
     if(!is_numeric($_GET["id"])){
           $orderdetailsSql = "select e.orderId,e.productId,a.productName,e.quantity,e.totalprice, f.time from orderdetails e 

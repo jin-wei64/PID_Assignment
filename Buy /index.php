@@ -41,6 +41,7 @@ $result = mysqli_query($link, $sqlStatement);
   <table class="table table-striped">
     <thead>
       <tr>
+        <th></th>
         <th>ID</th>
         <th>Name</th>
         <th>Price</th>
@@ -51,13 +52,14 @@ $result = mysqli_query($link, $sqlStatement);
     <tbody>
     <?php while ( $row = mysqli_fetch_assoc($result) ) { ?>
       <tr>
+      <td><img src = "./control/img/<?=$row["picture"] ?>" style="width:100px;height:100px;"  > </td>
         <td><?= $row["productId"] ?></td>
         <td><?= $row["productName"] ?></td>
         <td><?= $row["price"] ?></td>
         <td><?= $row["inStock"] ?></td>
         <td>
             <span class="float-right">
-                <a id= "buycar" href="./productdata.php?id=<?= $row["productId"] ?>" class="btn btn-outline-success btn-sm ryu">查看詳情</a>
+                <a id= "buycar" href = "productdata.php?id=<?= $row["productId"] ?>" class="btn btn-outline-success btn-sm ryu">查看詳情</a>
             </span>
         </td>
       </tr>

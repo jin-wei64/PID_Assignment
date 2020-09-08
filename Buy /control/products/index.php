@@ -3,7 +3,6 @@ require("connDB.php");
 $sqlStatement = <<<multi
 select * from products;
 multi;
-// "select * from employee";
 $result = mysqli_query($link, $sqlStatement);
 ?>
 <!DOCTYPE html>
@@ -21,12 +20,13 @@ $result = mysqli_query($link, $sqlStatement);
 
 <div class="container">
   <h2>Products List
-      <a href="addEmployee.php" class="btn btn-outline-info btn-md float-right">New</a>
+      <a href="addProduct.php" class="btn btn-outline-info btn-md float-right">New</a>
       <a href="../index.php" class="btn btn-outline-info btn-md float-right">控制頁</a>
   </h2>
   <table class="table table-striped">
     <thead>
       <tr>
+        <th></th>
         <th>ID</th>
         <th>Name</th>
         <th>Price</th>
@@ -37,6 +37,7 @@ $result = mysqli_query($link, $sqlStatement);
     <tbody>
     <?php while ( $row = mysqli_fetch_assoc($result) ) { ?>
       <tr>
+        <td><img src= "../img/<?= $row['picture']?>" style="width:100px;height:100px;"></td>
         <td><?= $row["productId"] ?></td>
         <td><?= $row["productName"] ?></td>
         <td><?= $row["price"] ?></td>
@@ -45,7 +46,7 @@ $result = mysqli_query($link, $sqlStatement);
             <span class="float-right">
                 <a href="./editForm.php?id=<?= $row["productId"] ?>" class="btn btn-outline-success btn-sm">Edit</a>
                 | 
-                <a href="./deleteEmployee.php?id=<?= $row["productId"] ?>" class="btn btn-outline-danger btn-sm">Delete</a>
+                <a href="./deleteProduct.php?id=<?= $row["productId"] ?>" class="btn btn-outline-danger btn-sm">Delete</a>
             </span>
         </td>
       </tr>
