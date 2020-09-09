@@ -45,6 +45,7 @@
   <h2>Client List
       <a href="products/index.php" class="btn btn-outline-info btn-md float-right">products</a>
       <a href="../login.php" class="btn btn-outline-info btn-md float-right">登出</a>
+      <a href="./js/index.php" class="btn btn-outline-info btn-md float-right">銷售量</a>
   </h2>
   <table class="table table-striped">
     <thead>

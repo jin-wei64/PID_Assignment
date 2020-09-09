@@ -1,20 +1,29 @@
 <?php
+$link = mysqli_connect ( 'localhost', 'root', 'root', 'shopping', 8889 ) or die ( mysqli_connect_error() );
+$result = mysqli_query ( $link, "set names utf8");
     if(isset($_POST["registerBtn"])) {
         $clientAccount = $_POST["clientAccount"];
-        $clientPassword = $_POST["clientPassword"];
-        $clientName = $_POST["clientName"];
-        $clientBday = $_POST["clientBday"];
-        $clientEmail = $_POST["clientEmail"];
-        $clientPhone = $_POST["clientPhone"];
-        $clientSex = $_POST["clientSex"];
-        $sql = "                     
-        insert into client(clientAccount,clientPassword,clientName,clientBday,clientEmail,clientPhone,clientSex) 
-        values('$clientAccount','$clientPassword','$clientName','$clientBday','$clientEmail','$clientPhone','$clientSex')
-        ";
-        $link = mysqli_connect ( 'localhost', 'root', 'root', 'shopping', 8889 ) or die ( mysqli_connect_error() );
-        $result = mysqli_query ( $link, "set names utf8");
-        mysqli_query($link, $sql);
-        header("location:login.php");
+        $check = "select clientAccount from client where clientAccount = '$clientAccount'";
+        $checkresult = mysqli_query($link,$check);
+        $checkrow = mysqli_fetch_assoc($checkresult);
+        if($checkrow != null){
+          echo "已有此帳號";
+        }else{
+          $clientPassword = $_POST["clientPassword"];
+          $clientName = $_POST["clientName"];
+          $clientBday = $_POST["clientBday"];
+          $clientEmail = $_POST["clientEmail"];
+          $clientPhone = $_POST["clientPhone"];
+          $clientSex = $_POST["clientSex"];
+          $sql = "                     
+          insert into client(clientAccount,clientPassword,clientName,clientBday,clientEmail,clientPhone,clientSex) 
+          values('$clientAccount','$clientPassword','$clientName','$clientBday','$clientEmail','$clientPhone','$clientSex')
+          ";
+    
+          mysqli_query($link, $sql);
+          header("location:login.php");
+        }
+        
     }
 ?>
 <!DOCTYPE html>
