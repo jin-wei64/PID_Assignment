@@ -72,15 +72,61 @@
   <form method="post">
   <button  id ="clear"name = "clear"class="btn btn-outline-danger float-right">清除購物車</button>
   </form>
-  <a id = "OK" href="order.php?id=<?= $clientID ?>" class="btn btn-outline-warning float-right">確認購買</a>
+  <a id = "OK"  class="btn btn-outline-warning float-right">確認購買</a>
 </div>
+<!-- modal start -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Check ID</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <input placeholder = "電話" id= "jj" type = "text">
+          <input placeholder = "地址" id= "gg" type = "text">
+          <input id= "after" type = "radio" name = "arrive" value = "after">轉帳</input>
+          <input id= "new" type = "radio" name = "arrive" value = "new" >貨到付款</input>
+        </div>
+        <div class="modal-footer">
+          <button id = "hh" type="button" class="btn btn-default" >OK</button>
+        </div>
+      </div>
+    </div>
+</div>
+<!-- modal end -->
 </body>
 <script>
+//href="order.php?id=<?= $clientID ?>"
     let a = <?= $sum ?>;
     if(a==0){
       $("#OK").hide();
       $("#clear").hide();
     }
+</script>
+<script>
+    $("#OK").click(function(){
+      $("#myModal").modal({backdrop:"static"})
+      $("#hh").click(function(){
+        if( $("#jj").val()!=null && $("#gg").val()!=null && $('input[name=arrive]:checked').val()!= null ){
+          $.ajax({
+            url:"order.php",
+            type:"post",
+            data:{
+              "id":<?= $clientID ?>,
+              "phone":`${$("#jj").val()}`,
+              "address":`${$("#gg").val()}`,
+              "payWay":`${$('input[name=arrive]:checked').val() }`
+            }
+          }).then(function(){
+            alert('success');
+            document.location.href='order.php?id=<?= $clientID ?>'
+          })
+        } else{
+          alert("請輸入正確內容")
+        }
 
+      })
+    })
 </script>
 </html>

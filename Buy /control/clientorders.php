@@ -1,9 +1,15 @@
 <?php
     session_start();
-    $clienitid = $_SESSION["clientid"];
+    $clientaccount = $_GET['id'];
+
+    $nameSql = "select clientName,clientid from client where clientAccount = '$clientaccount'";
     $link = mysqli_connect("localhost", "root", "root", "shopping", 8889);
     mysqli_query($link, "set names utf-8"); 
-    $sql = "select * from orders where clientid = $clienitid ";
+    $name =  mysqli_fetch_assoc(mysqli_query($link,$nameSql));
+
+    $clientid = $name['clientid'];
+
+    $sql = "select * from orders where clientid = $clientid ";
     $result =  mysqli_query($link,$sql);  
 ?>
 
@@ -22,7 +28,7 @@
 
 
 <div class="container">
-  <h2>TEST的訂單<a href="index.php" class="btn btn-outline-info btn-md float-right">控制頁</a></h2>
+  <h2><?= $name['clientName']  ?>的訂單<a href="index.php" class="btn btn-outline-info btn-md float-right">控制頁</a></h2>
   <table class="table table-striped">
     <thead>
       <tr>

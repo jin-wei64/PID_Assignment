@@ -4,8 +4,11 @@ session_start();
     mysqli_query($link, "set names utf-8");
     $account = $_SESSION["account"];
     $clientid=$_SESSION["clientid"];
-    if(is_numeric($_GET["id"])){
-        $orderSql = "insert into orders(clientid)values('$clientid')";
+    if(isset($_POST["id"])){
+        $phone = $_POST['phone'];
+        $address = $_POST['address'];
+        $payWay = $_POST['payWay'];
+        $orderSql = "insert into orders(clientid,phone,address,payWay)values('$clientid','$phone','$address','$payWay')";
         mysqli_query($link,$orderSql);
         $lastorder = "select * from orders where clientid = $clientid order by orderId desc limit 0,1";
         $row =mysqli_fetch_assoc (mysqli_query($link,$lastorder));
@@ -22,10 +25,7 @@ session_start();
             $orderdetails = "insert into orderdetails(orderId , productId , quantity ,totalprice)values('$lastorderID','$productId','$quantity','$totalprice ') ;";
             mysqli_query($link,$orderdetails);
         }
-        $orderdetailsSql = "select e.orderId,e.productId,a.productName,e.quantity,e.totalprice ,f.time from orderdetails e 
-        JOIN products a on e.productId = a.productId 
-        JOIN orders f on e.orderId = f.orderId where f.orderId = $lastorderID" ; 
-        $orderdetailsview= mysqli_query($link,$orderdetailsSql);
+        
         $a = "select p.productId ,p.inStock-o.quantity as instock  
         from orderdetails as o JOIN products p 
         on p.productId = o.productId 
@@ -40,6 +40,16 @@ session_start();
         $deleteBuyCar  = "delete from buycar where clientid = $clientid;";
         mysqli_query($link,$deleteBuyCar);
 
+   }
+   if(is_numeric($_GET["id"])){
+      $clientid = $_GET['id'];
+      $lastorder = "select * from orders where clientid = $clientid order by orderId desc limit 0,1";
+      $row =mysqli_fetch_assoc (mysqli_query($link,$lastorder));
+      $lastorderID = $row["orderId"];
+      $orderdetailsSql = "select e.orderId,e.productId,a.productName,e.quantity,e.totalprice ,f.time from orderdetails e 
+      JOIN products a on e.productId = a.productId 
+      JOIN orders f on e.orderId = f.orderId where f.orderId = $lastorderID" ; 
+      $orderdetailsview= mysqli_query($link,$orderdetailsSql);
    }
     if(!is_numeric($_GET["id"])){
           $orderdetailsSql = "select e.orderId,e.productId,a.productName,e.quantity,e.totalprice, f.time from orderdetails e 
@@ -76,12 +86,13 @@ session_start();
 
 
 <div class="container">
+<form method = "post">
 <?php if(isset($_GET["order"])) { ?>
   <h2><?= $_GET["order"]?>的訂單
       <a href="control/index.php" class="btn btn-outline-info btn-md float-right">控制頁</a>
   </h2>
 <?php } else { ?>
-  <h2><?= is_numeric($_GET["id"]) ? "本次購買項目":"歷史紀錄" ?>
+  <h2><?= is_numeric($_GET['id']) ? "本次購買項目":"歷史紀錄" ?>
       <a href="index.php?id=<?=$account?>" class="btn btn-outline-info btn-md float-right">首頁</a>
   </h2>
 <?php } ?>
@@ -110,6 +121,7 @@ session_start();
     </tbody>
   </table>
   <h3>總金額： <?=  $a ?></h3>
+  <form>
 </div>
 </body>
 </html>
