@@ -27,7 +27,7 @@ session_start();
         }
         
         $a = "select p.productId ,p.inStock-o.quantity as instock  
-        from orderdetails as o JOIN products p 
+        from orderdetails as o JOIN products p  
         on p.productId = o.productId 
         where p.productId = o.productId  and o.orderId = '$lastorderID' ";
         $b = mysqli_query($link,$a);
